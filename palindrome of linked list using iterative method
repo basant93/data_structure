@@ -1,0 +1,123 @@
+#include<stdio.h>
+#include<stdbool.h>
+
+struct node
+{
+    char data;
+    struct node *next;
+};
+
+void push(struct node **head_ref,int data)
+{
+    struct node *newnode=(struct node *)malloc(sizeof(struct node));
+    newnode->data=data;
+    newnode->next=*head_ref;
+    *head_ref=newnode;
+}
+
+void reverse(struct node**);
+bool compareLists(struct node *, struct node *);
+
+bool isPalindrome(struct node *head)
+{
+    struct node *slow_ptr=head , *fast_ptr=head;
+    struct node *prev_of_slow_ptr=head;
+    struct node *middle=NULL;
+    struct node*secondHalf;
+    bool res=true;
+
+    while(fast_ptr!=NULL && fast_ptr->next!=NULL)
+    {
+        fast_ptr=fast_ptr->next->next;
+        prev_of_slow_ptr=slow_ptr;
+        slow_ptr=slow_ptr->next;
+
+    }
+
+
+    if(fast_ptr !=NULL)
+    {
+        middle=slow_ptr;
+        slow_ptr=slow_ptr->next;
+    }
+
+    secondHalf=slow_ptr;
+
+    reverse(&secondHalf);
+    res=compareLists(head,secondHalf);
+    if(middle!=NULL)
+    {
+        prev_of_slow_ptr->next=middle;
+        middle->next=slow_ptr;
+    }
+    else
+        {
+        prev_of_slow_ptr->next=slow_ptr;
+
+        }
+
+return res;
+}
+
+void reverse(struct node **head_ref)
+{
+    struct node *current=*head_ref;
+    struct node *prev=NULL;
+    struct node *next;
+
+    while(current!=NULL)
+    {
+        next=current->next;
+        current->next=prev;
+        prev=current;
+        current=next;
+    }
+    *head_ref=prev;
+}
+
+
+bool compareLists(struct node *temp1, struct node *temp2)
+{
+
+    while(temp1 && temp2)
+    {
+        if(temp1->data==temp2->data)
+        {
+            temp1=temp1->next;
+            temp2=temp2->next;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    if(temp1==NULL && temp2==NULL)
+        return 1;
+
+    return 0;
+
+}
+
+int main()
+{
+    struct node *head=NULL;
+
+    push(&head,34);
+    push(&head,67);
+    push(&head,23);
+    push(&head,78);
+    push(&head,23);
+    push(&head,67);
+    push(&head,34);
+
+    if(isPalindrome(head))
+    {
+        printf("\n it is palindrome");
+    }
+    else
+    {
+        printf("\n it is palindrome");
+    }
+
+    return 0;
+}

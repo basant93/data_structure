@@ -1,0 +1,126 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct stack
+{
+    int top;
+    unsigned capacity;
+    int *array;
+
+};
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+
+void pushList(struct node **head_ref , int data)
+{
+    struct node *newnode =(struct node *)malloc(sizeof(struct node));
+    newnode->data= data;
+    newnode->next=*head_ref;
+    *head_ref=newnode;
+printf("\n %d is pushed in list",data);
+}
+
+
+
+struct stack *createStack(unsigned capacity)
+{
+
+struct stack *sp = (struct stack *)malloc(sizeof(struct stack));
+sp->top=-1;
+sp->capacity=capacity;
+
+sp->array=(int *)malloc(sp->capacity * sizeof(int *));
+return sp;
+}
+
+int isFull(struct stack *sp)
+{
+    return sp->top == sp->capacity-1;
+}
+
+int isEmpty(struct stack *sp)
+{
+    return sp->top == -1;
+}
+
+
+
+int Peek(struct stack *sp)
+{
+return sp->array[sp->top];
+}
+
+void push(struct stack *sp ,int data)
+{
+    if(isFull(sp))
+        return ;
+
+    sp->array[++sp->top]=data;
+    printf("\n %d data pushed", data);
+}
+
+int pop(struct stack *sp)
+{
+    if(isEmpty(sp))
+        return 0;
+
+    return sp->array[sp->top--];
+
+
+}
+
+
+int isPalindrome(struct node *head, struct stack *sp)
+{
+    struct node *current=head;
+
+    while(current!=NULL)
+    {
+        if(current->data!=pop(sp))
+        {
+            return 0;
+        }
+        current= current->next;
+    }
+
+return 1;
+}
+
+int main()
+{
+
+struct stack *sp=createStack(100);
+
+   struct node *head=NULL;
+
+    pushList(&head,12);
+    pushList(&head,56);
+    pushList(&head,5);
+    pushList(&head,56);
+    pushList(&head,4556);
+
+struct node *current =head;
+while(current!=NULL)
+{
+    push(sp,current->data);
+    current=current->next;
+}
+
+
+if(isPalindrome(head,sp))
+{
+
+    printf("\n linked list is a palindrome");
+}
+else
+{
+    printf("\n not a palindrome");
+}
+
+    return 0;
+}
+
